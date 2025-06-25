@@ -1,0 +1,45 @@
+@font-face {
+  font-family: 'CircularStd';
+  font-weight: 400;
+  font-style: normal;
+  src:
+    local('CircularStd'),
+    url('CircularStd-Book.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'CircularStd';
+  font-weight: 500;
+  font-style: normal;
+  src:
+    local('CircularStd'),
+    url('CircularStd-Medium.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'CircularStd';
+  font-weight: 700;
+  font-style: normal;
+  src:
+    local('CircularStd'),
+    url('CircularStd-Bold.otf') format('opentype');
+}
+
+/* Font Logo */
+@font-face {
+  font-family: 'Futura Md BT';
+  font-weight: 'bold';
+  font-style: normal;
+  src:
+    local('Futura Md BT'),
+    url('Futura-Md-BT.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Futura Bk BT';
+  font-weight: 'normal';
+  font-style: normal;
+  src:
+    local('Futura Bk BT'),
+    url('Futura-Bk-BT.ttf') format('truetype');
+}

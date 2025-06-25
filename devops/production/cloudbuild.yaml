@@ -1,0 +1,73 @@
+steps:
+  # [IMAGE]: Build
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Build'
+    args:
+      [
+        'build',
+        '--platform=linux/amd64',
+        '-t',
+        '$_IMAGE_NAME:$_IMAGE_VERSION',
+        '-f',
+        '$_DOCKERFILE_PATH',
+        '.'
+      ]
+
+  # [IMAGE]: Push
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Push'
+    args: ['push', '$_IMAGE_NAME:$_IMAGE_VERSION']
+
+  # [IMAGE]: Tag Latest]
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Add/Change Tag Push Version'
+    args: ['tag', '$_IMAGE_NAME:$_IMAGE_VERSION', '$_IMAGE_NAME:latest']
+
+  # [IMAGE]: Push Latest Tag
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'Push Latest'
+    args: ['push', '$_IMAGE_NAME:latest']
+
+  # [DEPLOY]: Prepare
+  - name: 'gcr.io/cloud-builders/gke-deploy'
+    id: 'Prepare deploy'
+    args:
+      - 'prepare'
+      - '--filename=$_K8S_YAML_PATH'
+      - '--image=$_IMAGE_NAME:$_IMAGE_VERSION'
+      - '--app=$_K8S_APP_NAME'
+      - '--version=$_IMAGE_VERSION'
+      - '--namespace=$_K8S_NAMESPACE'
+      - '--annotation=gcb-build-id=$BUILD_ID'
+
+  # [DEPLOY]: Apply
+  - name: 'gcr.io/cloud-builders/gke-deploy'
+    id: 'Apply deploy'
+    args:
+      - 'apply'
+      - '--filename=$_K8S_YAML_PATH'
+      - '--namespace=$_K8S_NAMESPACE'
+      - '--cluster=$_GKE_CLUSTER'
+      - '--location=$_GKE_LOCATION'
+
+images:
+  - '$_IMAGE_NAME:$_IMAGE_VERSION'
+service_account: '$_SERVICE_ACCOUNT'
+substitutions:
+  _K8S_APP_NAME: power-approval-fe
+  _GKE_CLUSTER: operation-cluster-1
+  _K8S_NAMESPACE: default
+  _K8S_YAML_PATH: /workspace/devops/production/deploy.yaml
+  _DOCKERFILE_PATH: /workspace/devops/production/Dockerfile
+  _SERVICE_ACCOUNT_ID: 'power-approval@ptpl-devops-prod.iam.gserviceaccount.com'
+  _BUCKET_NAME: ptpl-sales-marketing-dcrc
+  _IMAGE_NAME: asia-southeast2-docker.pkg.dev/${PROJECT_ID}/docker-prod/${_K8S_APP_NAME}
+  _IMAGE_VERSION: $SHORT_SHA
+  _GKE_LOCATION: $LOCATION
+  _OUTPUT_BUCKET_PATH: gs://${_BUCKET_NAME}/yaml-gke/${_K8S_APP_NAME}
+  _SERVICE_ACCOUNT: projects/${PROJECT_ID}/serviceAccounts/${_SERVICE_ACCOUNT_ID}
+
+options:
+  substitutionOption: 'ALLOW_LOOSE'
+  logging: CLOUD_LOGGING_ONLY
+tags: [$_K8S_APP_NAME]

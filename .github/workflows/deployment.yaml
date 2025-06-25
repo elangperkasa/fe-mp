@@ -1,0 +1,96 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - '**'  # Trigger on push to any branch
+
+## <github>settings/secrets/actions
+## DOCKER_USERNAME > username docker
+## DOCKER_PASSWORD > username docker
+## ENV_BASE64_STAGING > cat .env.production | base64
+## ENV_BASE64_PRODUCTION > cat .env.production | base64
+## GCP_SA_KEY_STAGING > copy paste key/dev-key.json
+## GCP_SA_KEY_PRODUCTION > copy paste key/prod-key.json
+## SSH_PRIVATE_KEY > from secret_key -> ssh-keygen -t ed25519 -C "username";
+
+jobs:
+  check-commit-and-version:
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.check_commit.outputs.should_skip }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Check commit message
+        id: check_commit
+        run: |
+          COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+          echo "Commit message: $COMMIT_MESSAGE"
+          if [[ "$COMMIT_MESSAGE" == *"Bump version to "* ]]; then
+            echo "should_skip=true" >> $GITHUB_ENV
+            echo "::set-output name=should_skip::true"
+          else
+            echo "should_skip=false" >> $GITHUB_ENV
+            echo "::set-output name=should_skip::false"
+          fi
+
+      - name: Print Python, Node and npm version  # Optional
+        run: |
+          echo "Node version: $(node -v)"
+          echo "npm version: $(npm -v)"
+
+      - name: Run lint
+        run: |
+          npm i eslint --save-dev --legacy-peer-deps
+          npm run lint
+
+      - name: Check repository owner and branch, continue only if main or staging
+        if: github.repository_owner == 'ptpl-source' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging')
+        run: echo "On main or staging branch from ptpl-source, continuing with build and deploy..."
+
+      # - name: Run tests
+      #   if: github.repository_owner == 'ptpl-source' && github.ref == 'refs/heads/main'
+      #   run: npm run ts-build
+
+      # - name: Decode .env file for production
+      #   if: github.repository_owner == 'ptpl-source' && github.ref == 'refs/heads/main'
+      #   run: echo ${{ secrets.ENV_BASE64_PRODUCTION }} | base64 --decode > .env.production
+
+      # - name: Decode .env file for staging
+      #   if: github.repository_owner == 'ptpl-source' && github.ref == 'refs/heads/staging'
+      #   run: echo ${{ secrets.ENV_BASE64_STAGING }} | base64 --decode > .env.production
+
+      # - name: Get current package version
+      #   if: github.repository_owner == 'ptpl-source' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging')
+      #   id: get_version
+      #   run: |
+      #     echo "Current package version: $(node -p "require('./package.json').version")"
+
+      # - name: Bump package.json version
+      #   if: github.repository_owner == 'ptpl-source' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging')
+      #   id: bump_version
+      #   run: |
+      #     CURRENT_VERSION=$(node -p "require('./package.json').version")
+      #     echo "Current package version: $CURRENT_VERSION"
+      #     NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+      #     echo "Next package version: $NEW_VERSION"
+      #     npm version --no-git-tag-version $NEW_VERSION
+      #     echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+
+      # - name: Setup SSH
+      #   uses: webfactory/ssh-agent@v0.5.3
+      #   with:
+      #     ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      # - name: Set up git user
+      #   run: |
+      #     git config --local user.name "coroo"
+      #     git config --local user.email "coroo.wicaksono@gmail.com"
+
+      # - name: Push changes to the repository
+      #   run: |
+      #     git remote set-url origin git@github.com:ptpl-source/it-post-fe.git
+      #     git add .
+      #     git commit -m "Bump version to ${{ env.NEW_VERSION }}"
+      #     git push origin HEAD:${{ github.ref }}

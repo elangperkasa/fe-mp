@@ -1,0 +1,17 @@
+<svg width="1240" height="395" viewBox="0 0 1280 495" version="1.1" id="logo-ptpl-h"
+  xmlns="http://www.w3.org/2000/svg">
+  <defs id="defs-logo-ptpl-h" />
+  <g id="g2048" transform="matrix(1,0,0,-1,0,425)">
+    <g id="logo">
+      <path d="M 336.61978,406.43862 C 329.07005,417.63441 316.22822,425 301.63448,425 H 205 l 53.34575,-81.43861 C 265.89384,332.38027 278.73237,325 293.33106,325 h 96.66893 z" style="fill:#e31837" id="shape-red" />
+      <path d="M 258.40038,281.44644 C 265.92393,292.62285 278.78225,300 293.38108,300 h 96.61891 L 336.65543,218.57313 C 329.12695,207.37227 316.2637,200 301.66977,200 H 205 Z" style="fill:#b2bb1d" id="shape-green" />
+      <path d="m 217.41602,279.27289 c 5.31079,7.98062 11.9357,14.98785 19.58399,20.72711 H 134.34277 c -14.60173,0 -27.46385,-7.37834 -34.992238,-18.55415 L 0,129.99999 h 96.73704 c 14.60008,0 27.4425,7.37671 34.9758,18.5769 z" style="fill:#0076c0" id="shape-blue" />
+    </g>
+    <text style="font-weight:bold;font-size:131.855px;font-family:'Futura Md BT';fill:#000000" transform="scale(1.0204567,-0.97995339)" id="text-pertamina" x="450.7785" y="-142.86392">
+      <tspan x="439.96234 523.39124 598.00354 682.35364 749.82043 844.82935 966.55151 1013.7927 1125.9084" y="-207.88989" id="tspan-pertamina">PERTAMINA</tspan>
+    </text>
+    <text transform="scale(0.96498391,-1.0362867)" style="font-weight:normal;font-size:125.161px;font-family:'Futura Bk BT';fill:#e31837" id="text-lubricants" x="476.69189" y="-164.04704">
+      <tspan x="465.93591 520.81879 610.93439 681.27454 748.23541 780.65192 871.39319 949.61847 1046.6178 1110.0741" y="-32.432751" id="tspan-lubricants">LUBRICANTS</tspan>
+    </text>
+  </g>
+</svg>

@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: power-approval-fe
+  namespace: default
+  labels:
+    app: power-approval-fe
+    tier: frontend
+    env: production
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: power-approval-fe
+      tier: frontend
+      env: production
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: power-approval-fe
+        tier: frontend
+        env: production
+    spec:
+      serviceAccountName: power-approval-sa
+      automountServiceAccountToken: false
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 60
+      volumes:
+        - name: tls-vol
+          secret:
+            secretName: ptpl-tls
+      containers:
+        - name: app
+          image: asia-southeast2-docker.pkg.dev/ptpl-devops-prod/docker-prod/power-approval-fe:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 443
+          volumeMounts:
+            - name: tls-vol
+              mountPath: '/app/cert/'
+              readOnly: true
+          resources:
+            requests:
+              memory: '256Mi'
+              cpu: '100m'
+              ephemeral-storage: '64Mi'
+            limits:
+              memory: '512Mi'
+              cpu: '200m'
+              ephemeral-storage: '128Mi'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: power-approval-fe
+  namespace: default
+  labels:
+    app: power-approval-fe
+    tier: frontend
+    env: production
+spec:
+  type: LoadBalancer
+  ports:
+    - name: 'https'
+      targetPort: 443
+      port: 443
+  selector:
+    app: power-approval-fe
+    tier: frontend
+    env: production
