@@ -36,6 +36,11 @@ import SalesEdit from './sales/sales-edit';
 import Detail from './sales-detail/detail-list';
 import DetailAdd from './sales-detail/detail-add';
 import DetailEdit from './sales-detail/detail-edit';
+import Promo from './promo/promo-view';
+import PromoAdd from './promo/promo-add';
+import PromoEdit from './promo/promo-edit';
+import UserViewPage   from './userviewpage/userviewpage';
+import BuyerPage   from './buyerpage/buyer-view';
 
 export const router = createBrowserRouter(
   [
@@ -75,7 +80,12 @@ export const router = createBrowserRouter(
             { path: 'sales/edit/:id', element: <SalesEdit /> },   
             { path: 'detail/view/:id', element: <Detail /> }, 
             { path: 'detail/add/:id', element: <DetailAdd /> },
-            { path: 'detail/edit/:id', element: <DetailEdit /> },       
+            { path: 'detail/edit/:id', element: <DetailEdit /> },   
+            { path: 'promo', element: <Promo /> }, 
+            { path: 'promo/add', element: <PromoAdd /> },
+            { path: 'promo/edit/:id', element: <PromoEdit /> },   
+            { path: 'userviewpage', element: <UserViewPage /> },   
+            { path: 'buyerview', element: <BuyerPage /> },    
           ],
         },
 

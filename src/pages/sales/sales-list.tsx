@@ -116,7 +116,7 @@ const SalesListPage = () => {
       {/* <button onClick={() => navigate('/sales/add')} style={{ padding: '8px 16px', fontSize: '16px', cursor: 'pointer' }}>+ Add Sales</button> */}
        
        
-      <GlobalButtonGroup /><p>&nbsp;</p>
+      <GlobalButtonGroup />
   
       {/* your product table or other content */}
     </div>

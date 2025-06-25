@@ -13,7 +13,11 @@ const ROOTS = {
   PRODUCT: '/product',
   PRODUCTADD: '/addproduct',
   USERADD: '/adduser',
-  CUSTOMER: '/customer'
+  CUSTOMER: '/customer',
+  PROMO: '/promo',
+  PROMOADD: '/addpromo',
+  USERVIEWPAGE: '/userviewpage',
+  BUYERVIEW: '/buyerview'
 };
 
 export const paths = {
@@ -75,6 +79,18 @@ export const paths = {
   },
   customer: {
     root: `${ROOTS.CUSTOMER}`,
+  },
+  promo: {
+    root: `${ROOTS.PROMO}`,
+  },
+  promoadd: {
+    root: `${ROOTS.PROMOADD}`,
+  },
+  userviewpage: {
+    root: `${ROOTS.USERVIEWPAGE}`,
+  },
+  buyerview: {
+    root: `${ROOTS.BUYERVIEW}`,
   },
   
 };

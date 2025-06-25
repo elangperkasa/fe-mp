@@ -128,8 +128,7 @@ const DetailListPage = () => {
         </tbody>
       </table>
       <div>
-      <h3>Total Subtotal Price:</h3>
-      <p>Rp {totalSubtotal.toLocaleString()}</p>
+      <h3>Total Subtotal Price: &nbsp; Rp {totalSubtotal.toLocaleString()}</h3>
     </div>
     </div>
   );

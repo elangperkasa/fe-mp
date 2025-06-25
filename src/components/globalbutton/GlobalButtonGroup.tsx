@@ -34,13 +34,8 @@ const GlobalButtonGroup = () => {
         + View Customer
       </button>
 
-      {/* <button
-        onClick={() => navigate('/promo')}
-        style={{ padding: '8px 16px', fontSize: '16px', cursor: 'pointer' }}
-      >
-        + View Promo
-      </button>
-
+      
+{/*
       <button
         onClick={() => navigate('/userlist')}
         style={{ padding: '8px 16px', fontSize: '16px', cursor: 'pointer' }}
@@ -53,6 +48,19 @@ const GlobalButtonGroup = () => {
       >
         + View Sales
       </button>
+       
+             <button
+        onClick={() => navigate('/userviewpage')}
+        style={{ padding: '8px 16px', fontSize: '16px', cursor: 'pointer' }}
+      >
+        + Report
+      </button>
+      {/* <button
+        onClick={() => navigate('/buyerview')}
+        style={{ padding: '8px 16px', fontSize: '16px', cursor: 'pointer' }}
+      >
+        + Buyer Page
+      </button> */}
     </div>
   );
 };

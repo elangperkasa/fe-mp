@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import GlobalButtonGroup from '../../../components/globalbutton/GlobalButtonGroup';
+import GlobalButtonGroup from '../../components/globalbutton/GlobalButtonGroup';
 
 type Product = {
   id: string;
@@ -11,13 +10,16 @@ type Product = {
   price: number;
 };
 
-type Category = {
+type Promo = {
   id: string;
-  category_name: string;
+  product_name: string;
+  promo_start: string;
+  promo_end: string;
+  discount_amount: number;
 };
 
 
-const ProductPage = () => {
+const PromoPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -28,7 +30,7 @@ const ProductPage = () => {
   const confirmDelete = window.confirm('Are you sure you want to delete this product?');
   if (!confirmDelete) return;
   try {
-    const res = await fetch(`http://localhost:3100/product/${id}`, {
+    const res = await fetch(`http://localhost:3100/promo/${id}`, {
       method: 'DELETE',
     //   headers: {
     //     'Content-Type': 'application/json',
@@ -49,17 +51,11 @@ const ProductPage = () => {
 };
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchPromo = async () => {
       try {
-        const res = await fetch('http://localhost:3100/product');
+        const res = await fetch('http://localhost:3100/promo');
         const data = await res.json();
-
-         // Fetch categories
-        const categoryRes = await fetch('http://localhost:3100/product-category');
-        const categoryData = await categoryRes.json();
-
         setProducts(data);
-        setCategories(categoryData);
       } catch (err) {
         console.error('Failed to fetch products', err);
       } finally {
@@ -67,14 +63,10 @@ const ProductPage = () => {
       }
     };
 
-    fetchProducts();
+    fetchPromo();
   }, []);
 
-  if (loading) return <p>Loading products...</p>;
-    const getCategoryName = (id: string) => {
-    const found = categories.find((c) => c.id === id);
-    return found ? found.category_name : 'Unknown';
-  };
+
   return (
         <div
           style={{
@@ -86,7 +78,7 @@ const ProductPage = () => {
             flexDirection: 'column',
           }}
         >
-        <h2>Product List</h2>
+        <h2>Promo List</h2>
       
 <div
  style={{
@@ -98,14 +90,14 @@ const ProductPage = () => {
   }}
 >
   <button
-    onClick={() => navigate('/addproduct')}
+    onClick={() => navigate('/promo/add')}
     style={{
       padding: '8px 16px',
       fontSize: '16px',
       cursor: 'pointer',
     }}
   >
-    + Add Product
+    + Add Promo
   </button>
 <GlobalButtonGroup />
 </div>
@@ -119,10 +111,11 @@ const ProductPage = () => {
         }}>
         <thead>
           <tr style={{ textAlign: 'left',backgroundColor: 'yellow' }}>
-            <th style={{ border: '1px solid black', textAlign: 'left', padding: '8px' }}>Name</th>
-            <th style={{ border: '1px solid black', textAlign: 'left', padding: '8px' }}>Category ID</th>
-            <th style={{ border: '1px solid black', textAlign: 'right', padding: '8px' }}>Stock</th>
-            <th style={{ border: '1px solid black', textAlign: 'right', padding: '8px' }}>Price (Rp)</th>
+            <th style={{ border: '1px solid black', textAlign: 'right', padding: '8px' }}>Product Name</th>
+            <th style={{ border: '1px solid black', textAlign: 'left', padding: '8px' }}>Promo Name</th>
+            <th style={{ border: '1px solid black', textAlign: 'left', padding: '8px' }}>Promo Start</th>
+            <th style={{ border: '1px solid black', textAlign: 'right', padding: '8px' }}>Promo End</th>
+            <th style={{ border: '1px solid black', textAlign: 'right', padding: '8px' }}>Discount Amount (Rp)</th>
             <th style={{ border: '1px solid black', textAlign: 'center', padding: '8px' }}>Actions</th>
           </tr>
         </thead>
@@ -130,9 +123,10 @@ const ProductPage = () => {
           {products.map((p) => (
             <tr key={p.id}>
               <td style={{ border: '1px solid black', textAlign: 'left', padding: '8px' }}>{p.product_name}</td>
-              <td style={{ border: '1px solid black', textAlign: 'left', padding: '8px' }}>{getCategoryName(p.productCategoryID)}</td>
-              <td style={{ border: '1px solid black', textAlign: 'right', padding: '8px' }}>{p.stock}</td>
-              <td style={{ border: '1px solid black', textAlign: 'right', padding: '8px' }}>{p.price.toLocaleString('id-ID')}</td>
+              <td style={{ border: '1px solid black', textAlign: 'left', padding: '8px' }}>{p.promo_name}</td>
+              <td style={{ border: '1px solid black', textAlign: 'right', padding: '8px' }}>{p.promo_start}</td>
+              <td style={{ border: '1px solid black', textAlign: 'right', padding: '8px' }}>{p.promo_end}</td>
+              <td style={{ border: '1px solid black', textAlign: 'right', padding: '8px' }}>{p.discount_amount}</td>
             <td style={{ border: '1px solid black', textAlign: 'center', padding: '8px' }}>
                 <button onClick={() => navigate(`/product/edit/${p.id}`)} style={{ marginRight: 10 }}>
                 Edit
@@ -149,4 +143,4 @@ const ProductPage = () => {
   );
 };
 
-export default ProductPage;
+export default PromoPage;

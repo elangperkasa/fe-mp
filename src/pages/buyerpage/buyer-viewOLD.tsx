@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+// import 'bootstrap/dist/css/bootstrap.css';
 
-import GlobalButtonGroup from '../../../components/globalbutton/GlobalButtonGroup';
+// import GlobalButtonGroup from '../../../components/globalbutton/GlobalButtonGroup';
 
 type Product = {
   id: string;
@@ -107,7 +108,7 @@ const ProductPage = () => {
   >
     + Add Product
   </button>
-<GlobalButtonGroup />
+{/* <GlobalButtonGroup /> */}
 </div>
 
 
